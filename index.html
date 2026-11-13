@@ -1,318 +1,470 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biele Burger</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg:#0a0c0e;
-    --bg-panel:#14181b;
-    --bg-panel-2:#1b2023;
-    --teal:#2fe6c9;
-    --orange:#ff7a3d;
-    --text:#f3f1ea;
-    --muted:#8b939b;
-    --line:#242b2f;
-  }
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:'Work Sans', sans-serif;
-    line-height:1.5;
-    -webkit-font-smoothing:antialiased;
-  }
-  .display{font-family:'Anton', sans-serif; letter-spacing:.5px;}
-
-  /* ---------- top bar ---------- */
-  .topbar{
-    position:sticky; top:0; z-index:40;
-    display:flex; align-items:center; justify-content:space-between;
-    padding:16px 6vw;
-    background:rgba(10,12,14,.85);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
-  }
-  .brand{display:flex; align-items:center; gap:10px;}
-  .brand-mark{
-    width:38px; height:38px; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #1c2226, #0d1012);
-    border:2px solid var(--teal);
-    display:flex; align-items:center; justify-content:center;
-    color:var(--teal); font-size:18px;
-  }
-  .brand-name{font-family:'Anton'; font-size:1.15rem; letter-spacing:1px;}
-  .topbar nav{display:flex; align-items:center; gap:22px;}
-  .topbar nav a{color:var(--muted); text-decoration:none; font-size:.92rem; font-weight:600;}
-  .topbar nav a:hover{color:var(--text);}
-  /* ---------- hero ---------- */
-  .hero{
-    position:relative;
-    overflow:hidden;
-    border-bottom:1px solid var(--line);
-    min-height:88vh;
-    display:flex;
-    align-items:center;
-    padding:9vh 6vw;
-  }
-  .hero-bg{
-    position:absolute; inset:0;
-    z-index:0;
-    overflow:hidden;
-    background:var(--bg);
-  }
-  .hero-bg-fg{
-    width:100%; height:100%;
-    object-fit:cover;
-    object-position:center;
-    display:block;
-  }
-  .hero-bg::after{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      linear-gradient(100deg, rgba(10,12,14,.92) 0%, rgba(10,12,14,.72) 32%, rgba(10,12,14,.28) 58%, rgba(10,12,14,.08) 100%),
-      linear-gradient(0deg, rgba(10,12,14,.85) 0%, rgba(10,12,14,0) 30%);
-  }
-  .hero-content{position:relative; z-index:1; max-width:640px;}
-
-  .hero-eyebrow{
-    color:var(--teal); font-weight:700; font-size:.85rem;
-    display:flex; align-items:center; gap:10px; margin-bottom:18px;
-  }
-  .hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);}
-  .hero h1{
-    font-size:clamp(3rem, 8vw, 6.4rem);
-    line-height:.92;
-    margin:0 0 20px;
-    max-width:11ch;
-  }
-  .hero h1 .stroke{-webkit-text-stroke:2px var(--teal); color:transparent;}
-  .hero p.sub{
-    max-width:40ch; color:var(--muted); font-size:1.05rem; margin:0 0 32px;
-  }
-  .hero-cta{display:flex; gap:14px; flex-wrap:wrap;}
-  .btn-primary{
-    background:var(--orange); color:#1a0e06; border:none;
-    padding:15px 26px; border-radius:6px; font-weight:700;
-    font-size:.95rem; cursor:pointer; text-decoration:none; display:inline-block;
-  }
-  .btn-ghost{
-    border:1.5px solid var(--line); color:var(--text); background:transparent;
-    padding:15px 26px; border-radius:6px; font-weight:700; font-size:.95rem;
-    cursor:pointer; text-decoration:none; display:inline-block;
-  }
-  .hero-meta{
-    margin-top:56px; display:flex; gap:40px; flex-wrap:wrap;
-    border-top:1px solid var(--line); padding-top:26px;
-  }
-  .hero-meta div{font-size:.85rem;}
-  .hero-meta .label{color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; font-size:.7rem; margin-bottom:6px;}
-
-  /* ---------- lineup / menu ---------- */
-  .section{padding:9vh 6vw;}
-  .section-head{
-    display:flex; align-items:flex-end; justify-content:space-between;
-    gap:20px; margin-bottom:44px; flex-wrap:wrap;
-    border-bottom:1px solid var(--line); padding-bottom:22px;
-  }
-  .section-head h2{font-size:clamp(2rem,4vw,3rem); margin:0;}
-  .section-head p{color:var(--muted); margin:0; max-width:36ch; font-size:.95rem;}
-
-
-  /* ---------- destaques (foto + vídeo) ---------- */
-  .feature-grid{
-    display:grid; grid-template-columns:1fr 1fr; gap:24px;
-  }
-  .feature-card{
-    background:var(--bg-panel); border:1px solid var(--line); border-radius:12px;
-    overflow:hidden;
-  }
-  .feature-media{aspect-ratio:4/5; overflow:hidden; background:#000;}
-  .feature-media img, .feature-media video{
-    width:100%; height:100%; object-fit:cover; display:block;
-  }
-  .feature-caption{padding:20px 22px;}
-  .feature-caption h3{
-    font-family:'Anton'; font-size:1.3rem; margin:0 0 8px; letter-spacing:.4px;
-  }
-  .feature-caption p{margin:0; color:var(--muted); font-size:.9rem;}
-  @media (max-width:720px){
-    .feature-grid{grid-template-columns:1fr;}
-  }
-
-  /* ---------- about / info strip ---------- */
-  .strip{
-    background:var(--bg); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
-    padding:8vh 6vw; display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
-  }
-  .strip-card{
-    background:var(--bg-panel); border:1px solid var(--line); border-radius:12px;
-    padding:32px 28px; display:flex; flex-direction:column; gap:16px;
-    transition:border-color .15s ease, transform .15s ease;
-  }
-  .strip-card:hover{border-color:#3a444a; transform:translateY(-3px);}
-  .strip-icon{
-    width:46px; height:46px; border-radius:50%;
-    background:radial-gradient(circle at 35% 30%, #1c2226, #0d1012);
-    border:1.5px solid var(--teal);
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.2rem;
-  }
-  .strip h4{font-family:'Anton'; font-size:1rem; color:var(--teal); margin:0; letter-spacing:.5px;}
-  .strip p{margin:0; color:var(--muted); font-size:.92rem;}
-
-  /* ---------- footer ---------- */
-  footer{padding:6vh 6vw 4vh; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
-  .map-frame{
-    display:block; width:100%; height:380px; border-radius:10px; overflow:hidden;
-    border:1px solid var(--line); filter:grayscale(.15) contrast(1.05);
-    transition:filter .15s ease, border-color .15s ease;
-  }
-  .map-frame:hover{filter:grayscale(0) contrast(1.05); border-color:var(--teal);}
-  .map-frame img{width:100%; height:100%; object-fit:cover; display:block;}
-  footer .brand-name{font-size:1rem;}
-  footer small{color:var(--muted);}
-
-  @media (max-width:900px){
-    .hero{ padding:8vh 6vw; min-height:70vh; }
-  }
-  @media (max-width:720px){
-    .strip{grid-template-columns:1fr;}
-
-    /* hero becomes a stacked banner + text on mobile, instead of text-over-image */
-    .hero{
-      flex-direction:column; align-items:stretch;
-      min-height:0; padding:0 0 6vh;
-    }
-    .hero-bg{
-      position:relative; inset:auto;
-      width:100%; aspect-ratio:1881/1058;
-    }
-    .hero-bg::after{
-      background:linear-gradient(0deg, var(--bg) 0%, rgba(10,12,14,.4) 45%, rgba(10,12,14,0) 75%);
-    }
-    .hero-content{
-      padding:4vh 6vw 0; max-width:none;
-    }
-    .hero-meta{margin-top:36px;}
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chapa Burger | Cardápio e pedido pelo WhatsApp</title>
+  <meta name="description" content="Hambúrgueres de chapa, porções, milkshake e bebidas. Veja o cardápio com preços, monte a comanda no site e envie o pedido pelo WhatsApp, para entrega ou retirada.">
+  <meta name="theme-color" content="#160E08">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Chapa Burger | Cardápio e pedido pelo WhatsApp">
+  <meta property="og:description" content="Monte a comanda no site e envie o pedido pelo WhatsApp.">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&family=Courier+Prime:wght@400;700&display=swap">
+  <link rel="preload" as="image" href="img/primeira-tela-larga.webp" media="(min-width: 960px)" fetchpriority="high">
+  <link rel="preload" as="image" href="img/primeira-tela-celular.webp" media="(max-width: 959px)" fetchpriority="high">
+  <link rel="stylesheet" href="css/estilo.css">
+  <script>document.documentElement.classList.add("js")</script>
+  <script src="js/config.js" defer></script>
+  <script src="js/site.js" defer></script>
 </head>
 <body>
+  <a class="pular" href="#cardapio">Pular para o cardápio</a>
 
-<div class="topbar">
-  <div class="brand">
-    <div class="brand-mark">🤘</div>
-    <div class="brand-name display">BIELE BURGER</div>
-  </div>
-  <nav>
-    <a href="cardapio.html">Cardápio</a>
-    <a href="#sobre">Sobre</a>
-  </nav>
-</div>
+  <p class="aviso-demo">Versão de demonstração: nome, cardápio, preços, endereço e horários são provisórios.</p>
 
-<section class="hero">
-  <div class="hero-bg">
-    <img class="hero-bg-fg" src="assets/img/hero-bg-refri-wide.png" alt="Burger Biele Burger com batata frita e Coca-Cola">
-  </div>
-  <div class="hero-content">
-    <div class="hero-eyebrow"><span class="dot"></span>QUI A TER · 19H ÀS 23H30</div>
-    <h1 class="display">SEU BURGER<br>TEM UMA<br><span class="stroke">TRILHA SONORA</span></h1>
-    <p class="sub">Cada blend da casa leva o nome de uma lenda do rock. Monte seu pedido e mande direto pro WhatsApp — sem enrolação, sem fila.</p>
-    <div class="hero-cta">
-      <a href="cardapio.html" class="btn-primary">Ver o cardápio</a>
-      <a href="https://wa.me/5527999725119" target="_blank" rel="noopener noreferrer" class="btn-ghost">Chamar no WhatsApp</a>
-    </div>
-    <div class="hero-meta">
-      <div><div class="label">Delivery</div>(27) 99972-5119</div>
-      <div><div class="label">Funcionamento</div>Quinta a Terça, 19h às 23h30</div>
-      <div><div class="label">Instagram</div>@bieleburger</div>
-    </div>
-  </div>
-</section>
+  <header class="topo">
+    <div class="topo__dentro">
+      <a class="marca" href="#inicio">Chapa <span>burger</span></a>
 
-<section class="section" id="destaques">
-  <div class="section-head">
-    <div>
-      <h2 class="display">DESTAQUES DA CASA</h2>
-      <p>Duas estrelas do cardápio, direto da cozinha pro seu feed.</p>
+      <nav class="nav" aria-label="Principal">
+        <button class="nav__abrir" type="button" aria-expanded="false" aria-controls="nav-lista">Menu</button>
+        <ul id="nav-lista" class="nav__lista">
+          <li><a href="#cardapio">Cardápio</a></li>
+          <li><a href="#como-pedir">Como pedir</a></li>
+          <li><a href="#onde">Horário e endereço</a></li>
+        </ul>
+      </nav>
+
+      <a class="topo__comanda" href="#comanda">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6M9 16h3"/></svg>
+        <span class="topo__comanda-rotulo">Comanda</span>
+        <span class="contador" data-contador>0</span>
+      </a>
     </div>
-  </div>
-  <div class="feature-grid">
-    <div class="feature-card">
-      <div class="feature-media">
-        <img src="assets/img/Burgue.png" alt="Hambúrguer em destaque">
+  </header>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-titulo">
+      <div class="hero__texto">
+        <h1 id="hero-titulo">Hambúrguer de chapa, feito na hora.</h1>
+        <p class="hero__sub">Escolha no cardápio, monte a comanda aqui no site e envie o pedido pelo WhatsApp. Entrega na região ou retirada no balcão.</p>
+        <div class="hero__acoes">
+          <a class="btn btn--primario" href="#cardapio">Ver cardápio e pedir</a>
+          <a class="btn btn--contorno" href="#onde">Horário e endereço</a>
+        </div>
+        <p class="status" data-status>
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span data-status-texto>Terça a domingo, a partir das 18h</span>
+        </p>
       </div>
-      <div class="feature-caption">
-        <h3>Beatles</h3>
-        <p>Quatro carnes suculentas de 80g cada, aquele cheddar de qualidade, cream cheese do bom e bacon em fatias perfeitas — tudo no pão que você só acha aqui.</p>
+      <!-- A imagem aparece na hora; o vídeo (mesma cena) é carregado pelo site.js por cima dela.
+           Sem JavaScript, com "reduzir movimento" ou economia de dados, fica só a imagem. -->
+      <div class="hero__midia video" data-video>
+        <picture>
+          <source media="(min-width: 960px)" srcset="img/primeira-tela-larga.webp" width="1388" height="720">
+          <img src="img/primeira-tela-celular.webp" width="688" height="516" fetchpriority="high"
+               alt="Hambúrguer com cheddar, alface e tomate soltando fumaça, ao lado de batata frita e um copo de refrigerante com gelo">
+        </picture>
+        <video muted loop playsinline preload="none" disablepictureinpicture aria-hidden="true"
+               data-src-larga="video/primeira-tela-larga.mp4" data-src-celular="video/primeira-tela-celular.mp4"></video>
+        <button type="button" class="video__botao" data-video-botao hidden></button>
       </div>
-    </div>
-    <div class="feature-card">
-      <div class="feature-media">
-        <video id="stryperVideo" src="assets/img/Video-noaudio.mp4" poster="assets/img/video-poster.jpg" autoplay muted loop playsinline preload="auto"></video>
-      </div>
-      <div class="feature-caption">
-        <h3>Stryper</h3>
-        <p>Três carnes de 100g cada, cheddar em fatia em cada camada, muito creme de cheddar (sim, tem cheddar) e bastante bacon pra fechar com chave de ouro. Tudo no nosso pão australiano.</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<section class="strip" id="sobre">
-  <div class="strip-card">
-    <div class="strip-icon">🏠</div>
-    <h4>A CASA</h4>
-    <p>Blends artesanais, pão fresquinho e um cardápio que homenageia quem embala a cozinha. Peça sua felicidade.</p>
-  </div>
-  <div class="strip-card">
-    <div class="strip-icon">💬</div>
-    <h4>COMO FUNCIONA</h4>
-    <p>Monte o pedido aqui no site, revise no carrinho e finalize direto no WhatsApp da loja — o pagamento e a entrega são combinados por lá.</p>
-  </div>
-  <div class="strip-card">
-    <div class="strip-icon">📍</div>
-    <h4>ONDE ESTAMOS</h4>
-    <p>Delivery via (27) 99972-5119. R. Gonçalves Dias, 11 - Res. Coqueiral, Vila Velha - ES, 29102-740.</p>
-  </div>
-</section>
+    <!-- Destaque: um lanche do cardápio. O preço e o botão seguem o item com o mesmo
+         data-item no cardápio (data-valor-de e data-controle). Nome e descrição são escritos aqui. -->
+    <section id="destaque" class="destaque" aria-labelledby="destaque-titulo" data-zona="destaque">
+      <div class="dentro destaque__dentro">
+        <div class="destaque__foto">
+          <img src="img/destaque-duplo-cheddar.webp" width="860" height="720" loading="lazy"
+               alt="Duplo Cheddar de perto, soltando fumaça: pão com gergelim, alface, tomate, cebola roxa, duas carnes com cheddar derretido e maionese">
+        </div>
+        <div class="destaque__texto">
+          <p class="destaque__chamada">Conheça nosso hambúrguer</p>
+          <h2 id="destaque-titulo">Duplo Cheddar</h2>
+          <p class="destaque__desc">Dois blends de 120 g, cheddar em dobro, alface, tomate, cebola roxa e maionese da casa.</p>
+          <p class="destaque__preco" data-valor-de="duplo-cheddar">R$ 36,90</p>
+          <div class="destaque__acoes">
+            <div class="destaque__acao" data-controle="duplo-cheddar" data-rotulo="Adicionar à comanda"></div>
+            <a class="destaque__link" href="#lanches">Ver os outros lanches</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<section class="section" id="localizacao">
-  <div class="section-head">
-    <div>
-      <h2 class="display">LOCALIZAÇÃO</h2>
-      <p>R. Gonçalves Dias, 11 - Res. Coqueiral, Vila Velha - ES, 29102-740</p>
+    <!-- Faixa do combo: o preço segue o item "combo" do cardápio -->
+    <section class="promo" aria-labelledby="promo-titulo">
+      <div class="dentro">
+        <div class="promo__painel">
+          <img class="promo__foto" src="img/combo-720.webp"
+               srcset="img/combo-720.webp 720w, img/combo-1200.webp 1200w"
+               sizes="(min-width: 960px) 60vw, 100vw"
+               width="1200" height="800" loading="lazy"
+               alt="Hambúrguer com batata frita e um copo de refrigerante com gelo sobre uma tábua de madeira">
+          <div class="promo__texto">
+            <h2 id="promo-titulo" lang="en">Combo it<br> better</h2>
+            <p class="promo__desc">Batata frita individual e refrigerante lata 350 ml junto com qualquer lanche do cardápio.</p>
+            <p class="promo__preco">+ <span data-valor-de="combo">R$ 16,90</span> <span class="promo__preco-nota">no lanche</span></p>
+            <a class="btn btn--primario" href="#combo">Explore os combos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cardapio" class="cardapio" aria-labelledby="cardapio-titulo">
+      <div class="dentro">
+        <div class="cardapio__cabeca">
+          <h2 id="cardapio-titulo">Cardápio</h2>
+          <p>Toque em <strong>Adicionar</strong> para colocar o item na comanda. A taxa de entrega é informada pela loja no WhatsApp.</p>
+        </div>
+
+        <nav class="categorias" aria-label="Categorias do cardápio" data-categorias>
+          <a href="#lanches">Lanches</a>
+          <a href="#combo">Combo</a>
+          <a href="#acompanhamentos">Bebidas e acompanhamentos</a>
+        </nav>
+
+        <div class="cardapio__grade">
+          <div class="cardapio__lista" data-zona="cardapio">
+
+            <!-- Cada item: data-item (identificador único, só letras e hífen), data-nome e data-preco (com ponto). -->
+            <section id="lanches" class="categoria" aria-labelledby="lanches-titulo">
+              <h3 id="lanches-titulo" class="categoria__titulo">Lanches</h3>
+              <ul class="itens itens--foto">
+                <li class="item" data-item="classico" data-nome="Clássico" data-preco="29.90">
+                  <img class="item__foto" src="img/classico.webp" width="640" height="480" loading="lazy" alt="Hambúrguer com cheddar derretido, alface, tomate e cebola roxa no pão com gergelim">
+                  <div class="item__info">
+                    <h4 class="item__nome">Clássico</h4>
+                    <p class="item__desc">Blend bovino de 160 g, cheddar, alface, tomate, cebola roxa e maionese da casa no pão com gergelim.</p>
+                  </div>
+                  <div class="item__rodape">
+                    <p class="item__preco" data-valor>R$ 29,90</p>
+                    <div class="item__acao"></div>
+                  </div>
+                </li>
+                <li class="item" data-item="duplo-cheddar" data-nome="Duplo Cheddar" data-preco="36.90">
+                  <img class="item__foto" src="img/duplo-cheddar.webp" width="640" height="480" loading="lazy" alt="Hambúrguer de duas carnes com cheddar entre elas, alface, tomate e cebola roxa">
+                  <div class="item__info">
+                    <h4 class="item__nome">Duplo Cheddar</h4>
+                    <p class="item__desc">Dois blends de 120 g, cheddar em dobro, alface, tomate, cebola roxa e maionese da casa.</p>
+                  </div>
+                  <div class="item__rodape">
+                    <p class="item__preco" data-valor>R$ 36,90</p>
+                    <div class="item__acao"></div>
+                  </div>
+                </li>
+                <li class="item" data-item="duplo-bacon" data-nome="Duplo Bacon" data-preco="39.90">
+                  <img class="item__foto" src="img/duplo-bacon.webp" width="640" height="480" loading="lazy" alt="Hambúrguer alto de duas carnes com cheddar escorrendo, bacon, alface e tomate">
+                  <div class="item__info">
+                    <h4 class="item__nome">Duplo Bacon</h4>
+                    <p class="item__desc">Dois blends de 120 g, cheddar em dobro, bacon crocante, alface, tomate e molho barbecue.</p>
+                  </div>
+                  <div class="item__rodape">
+                    <p class="item__preco" data-valor>R$ 39,90</p>
+                    <div class="item__acao"></div>
+                  </div>
+                </li>
+                <li class="item" data-item="wrap-frango" data-nome="Wrap de Frango" data-preco="27.90">
+                  <img class="item__foto" src="img/wrap-frango.webp" width="282" height="211" loading="lazy" alt="Wrap cortado ao meio mostrando o recheio de carne, queijo, tomate e alface">
+                  <div class="item__info">
+                    <h4 class="item__nome">Wrap de Frango</h4>
+                    <p class="item__desc">Frango grelhado em tiras, cheddar, tomate, alface e maionese temperada na tortilha tostada.</p>
+                  </div>
+                  <div class="item__rodape">
+                    <p class="item__preco" data-valor>R$ 27,90</p>
+                    <div class="item__acao"></div>
+                  </div>
+                </li>
+              </ul>
+            </section>
+
+            <section id="combo" class="combo" aria-labelledby="combo-titulo">
+              <div class="combo__texto item" data-item="combo" data-nome="Combo (batata individual + refrigerante lata)" data-preco="16.90">
+                <h3 id="combo-titulo" class="combo__titulo">Transforme em combo</h3>
+                <p class="combo__desc">Batata frita individual e refrigerante lata 350 ml para acompanhar qualquer lanche. Escolha o sabor do refrigerante nas observações do pedido.</p>
+                <div class="item__rodape">
+                  <p class="item__preco">+ <span data-valor>R$ 16,90</span></p>
+                  <div class="item__acao"></div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Bebidas e acompanhamentos em cartões com foto.
+                 Cartão com sabores (data-sabores): cada sabor é um item, com data-item, data-nome e
+                 data-preco no próprio botão de escolha. O preço e o botão seguem o sabor marcado. -->
+            <section id="acompanhamentos" class="categoria" aria-labelledby="acompanhamentos-titulo">
+              <h3 id="acompanhamentos-titulo" class="categoria__titulo">Bebidas e acompanhamentos</h3>
+              <ul class="produtos">
+                <li class="produto item" data-item="batata-cheddar" data-nome="Batata frita com cheddar" data-preco="22.90">
+                  <div class="produto__moldura"><img class="produto__foto" src="img/batata-cheddar.webp" width="224" height="224" loading="lazy" alt="Batata frita sobre uma tábua com um pote de molho cheddar"></div>
+                  <div class="produto__corpo">
+                    <h4 class="item__nome">Batata frita com cheddar</h4>
+                    <p class="item__desc">Porção de 300 g com pote de cheddar cremoso para molhar.</p>
+                    <div class="produto__rodape">
+                      <p class="item__preco" data-valor>R$ 22,90</p>
+                      <div class="item__acao"></div>
+                    </div>
+                  </div>
+                </li>
+                <li class="produto item" data-item="aneis-cebola" data-nome="Anéis de cebola" data-preco="19.90">
+                  <div class="produto__moldura"><img class="produto__foto" src="img/aneis-cebola.webp" width="228" height="228" loading="lazy" alt="Anéis de cebola empanados e dourados"></div>
+                  <div class="produto__corpo">
+                    <h4 class="item__nome">Anéis de cebola</h4>
+                    <p class="item__desc">Empanados e fritos na hora, porção com 12 unidades.</p>
+                    <div class="produto__rodape">
+                      <p class="item__preco" data-valor>R$ 19,90</p>
+                      <div class="item__acao"></div>
+                    </div>
+                  </div>
+                </li>
+                <li class="produto" data-sabores>
+                  <div class="produto__moldura"><img class="produto__foto" src="img/milkshake.webp" width="220" height="220" loading="lazy" alt="Milkshake de chocolate com chantilly, calda escorrendo pelo copo e biscoito recheado"></div>
+                  <div class="produto__corpo">
+                    <h4 class="item__nome">Milkshake</h4>
+                    <p class="item__desc">Copo de 400 ml com chantilly.</p>
+                    <fieldset class="sabores">
+                      <legend class="sr">Sabor do milkshake</legend>
+                      <label class="sabor"><input type="radio" name="sabor-milkshake" data-item="milkshake-chocolate" data-nome="Milkshake de chocolate com biscoito" data-preco="21.90" checked><span>Chocolate com biscoito</span></label>
+                      <label class="sabor"><input type="radio" name="sabor-milkshake" data-item="milkshake-morango" data-nome="Milkshake de morango" data-preco="21.90"><span>Morango</span></label>
+                      <label class="sabor"><input type="radio" name="sabor-milkshake" data-item="milkshake-baunilha" data-nome="Milkshake de baunilha" data-preco="21.90"><span>Baunilha</span></label>
+                    </fieldset>
+                    <div class="produto__rodape">
+                      <p class="item__preco" data-valor>R$ 21,90</p>
+                      <div class="item__acao"></div>
+                    </div>
+                  </div>
+                </li>
+                <li class="produto" data-sabores>
+                  <div class="produto__moldura"><img class="produto__foto" src="img/refrigerante.webp" width="280" height="280" loading="lazy" alt="Copo de Coca-Cola com gelo"></div>
+                  <div class="produto__corpo">
+                    <h4 class="item__nome">Refrigerante lata</h4>
+                    <p class="item__desc">350 ml.</p>
+                    <fieldset class="sabores">
+                      <legend class="sr">Sabor do refrigerante</legend>
+                      <label class="sabor"><input type="radio" name="sabor-refrigerante" data-item="coca-cola" data-nome="Coca-Cola lata 350 ml" data-preco="6.90" checked><span>Coca-Cola</span></label>
+                      <label class="sabor"><input type="radio" name="sabor-refrigerante" data-item="coca-zero" data-nome="Coca-Cola sem açúcar lata 350 ml" data-preco="6.90"><span>Coca-Cola sem açúcar</span></label>
+                      <label class="sabor"><input type="radio" name="sabor-refrigerante" data-item="guarana" data-nome="Guaraná lata 350 ml" data-preco="6.50"><span>Guaraná</span></label>
+                    </fieldset>
+                    <div class="produto__rodape">
+                      <p class="item__preco" data-valor>R$ 6,90</p>
+                      <div class="item__acao"></div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+
+              <h4 class="categoria__sub">Suco e água</h4>
+              <ul class="itens itens--texto">
+                <li class="item" data-item="suco" data-nome="Suco natural 400 ml" data-preco="9.90">
+                  <div class="item__info"><h5 class="item__nome">Suco natural</h5><p class="item__desc">400 ml, laranja ou limão. Diga o sabor nas observações.</p></div>
+                  <div class="item__rodape"><p class="item__preco" data-valor>R$ 9,90</p><div class="item__acao"></div></div>
+                </li>
+                <li class="item" data-item="agua" data-nome="Água mineral 500 ml" data-preco="4.50">
+                  <div class="item__info"><h5 class="item__nome">Água mineral</h5><p class="item__desc">500 ml, com ou sem gás.</p></div>
+                  <div class="item__rodape"><p class="item__preco" data-valor>R$ 4,50</p><div class="item__acao"></div></div>
+                </li>
+              </ul>
+            </section>
+          </div>
+
+          <aside id="comanda" class="comanda" aria-labelledby="comanda-titulo" tabindex="-1" data-zona="comanda">
+            <div class="comanda__papel">
+              <div class="comanda__cabeca">
+                <h2 id="comanda-titulo" class="comanda__titulo">Comanda</h2>
+                <button type="button" class="comanda__limpar" data-limpar hidden>Limpar</button>
+              </div>
+              <p class="comanda__loja">Pedido para <span data-loja-nome>Chapa Burger</span></p>
+
+              <noscript><p class="comanda__vazia">Para montar o pedido pelo site, ative o JavaScript do navegador.</p></noscript>
+              <p class="comanda__vazia" data-vazia>Nada por aqui ainda. Toque em Adicionar em qualquer item do cardápio.</p>
+              <ul class="comanda__linhas" data-linhas></ul>
+
+              <div class="comanda__total">
+                <span>Total dos itens</span>
+                <strong data-total>R$ 0,00</strong>
+              </div>
+              <p class="comanda__nota">Taxa de entrega à parte, informada pela loja no WhatsApp.</p>
+
+              <p class="pedido__erro comanda__erro" data-erro-vazia role="alert" hidden></p>
+              <button type="button" class="btn btn--primario btn--largo comanda__finalizar" data-finalizar>Finalizar pedido</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="como-pedir" class="como" aria-labelledby="como-titulo">
+      <div class="dentro">
+        <h2 id="como-titulo">Como funciona o pedido</h2>
+        <ol class="passos">
+          <li>
+            <h3>Monte a comanda</h3>
+            <p>Adicione os itens do cardápio. O total dos itens aparece na hora, e você pode mudar as quantidades até enviar.</p>
+          </li>
+          <li>
+            <h3>Envie pelo WhatsApp</h3>
+            <p>Informe nome, entrega ou retirada e forma de pagamento. A mensagem chega pronta para a loja.</p>
+          </li>
+          <li>
+            <h3>Confirme com a loja</h3>
+            <p>A loja responde com a taxa de entrega e o tempo de preparo antes de começar o seu pedido.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="onde" class="onde" aria-labelledby="onde-titulo">
+      <div class="dentro onde__dentro">
+        <div class="onde__info">
+          <h2 id="onde-titulo">Horário e endereço</h2>
+          <p class="status status--grande" data-status>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span data-status-texto>Terça a domingo, a partir das 18h</span>
+          </p>
+          <dl class="onde__dados">
+            <div>
+              <dt>Endereço</dt>
+              <dd>Rua Exemplo, 123, Bairro, Cidade (UF) <span class="tag">exemplo</span></dd>
+            </div>
+            <div>
+              <dt>Entrega</dt>
+              <dd>Bairros próximos. A taxa depende da distância e é informada no WhatsApp. <span class="tag">exemplo</span></dd>
+            </div>
+            <div>
+              <dt>Retirada</dt>
+              <dd>No balcão, com o nome de quem fez o pedido.</dd>
+            </div>
+            <div>
+              <dt>WhatsApp</dt>
+              <dd>Número a definir</dd>
+            </div>
+            <div>
+              <dt>Instagram</dt>
+              <dd>Perfil a definir</dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="onde__horario">
+          <h3>Horário de funcionamento <span class="tag">exemplo</span></h3>
+          <!-- data-dia: 0 = domingo ... 6 = sábado. Sem data-abre = fechado. Fechar à meia-noite = "00:00". -->
+          <table class="horario">
+            <caption class="sr">Horário de funcionamento por dia da semana</caption>
+            <tbody>
+              <tr data-dia="2" data-abre="18:00" data-fecha="23:00"><th scope="row">Terça</th><td>18h às 23h</td></tr>
+              <tr data-dia="3" data-abre="18:00" data-fecha="23:00"><th scope="row">Quarta</th><td>18h às 23h</td></tr>
+              <tr data-dia="4" data-abre="18:00" data-fecha="23:00"><th scope="row">Quinta</th><td>18h às 23h</td></tr>
+              <tr data-dia="5" data-abre="18:00" data-fecha="00:00"><th scope="row">Sexta</th><td>18h à meia-noite</td></tr>
+              <tr data-dia="6" data-abre="18:00" data-fecha="00:00"><th scope="row">Sábado</th><td>18h à meia-noite</td></tr>
+              <tr data-dia="0" data-abre="18:00" data-fecha="23:00"><th scope="row">Domingo</th><td>18h às 23h</td></tr>
+              <tr data-dia="1"><th scope="row">Segunda</th><td>Fechado</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="dentro rodape__dentro">
+      <p class="marca">Chapa <span>burger</span></p>
+      <nav aria-label="Rodapé">
+        <ul class="rodape__links">
+          <li><a href="#cardapio">Cardápio</a></li>
+          <li><a href="#como-pedir">Como pedir</a></li>
+          <li><a href="#onde">Horário e endereço</a></li>
+        </ul>
+      </nav>
+      <p class="rodape__nota">Site em demonstração. Fotos ilustrativas, a substituir por fotos dos produtos da casa.</p>
     </div>
-    <a class="btn-ghost" href="https://www.google.com/maps/search/?api=1&query=R.+Gon%C3%A7alves+Dias%2C+11+-+Res.+Coqueiral%2C+Vila+Velha+-+ES%2C+29102-740" target="_blank" rel="noopener">Abrir no Google Maps</a>
-  </div>
-  <a class="map-frame" href="https://www.google.com/maps/search/?api=1&query=R.+Gon%C3%A7alves+Dias%2C+11+-+Res.+Coqueiral%2C+Vila+Velha+-+ES%2C+29102-740" target="_blank" rel="noopener">
-    <img src="assets/img/map-location.png" alt="Mapa da localização da Biele Burger em Vila Velha, ES" loading="lazy">
+  </footer>
+
+  <dialog class="finalizar" aria-labelledby="finalizar-titulo" data-dialogo>
+    <div class="finalizar__cabeca">
+      <h2 id="finalizar-titulo" class="finalizar__titulo">Finalizar pedido</h2>
+      <button type="button" class="finalizar__fechar" data-fechar aria-label="Voltar ao cardápio">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="finalizar__corpo">
+      <div class="resumo">
+        <ul class="resumo__linhas" data-resumo></ul>
+        <p class="resumo__total"><span>Total dos itens</span><strong data-resumo-total>R$ 0,00</strong></p>
+        <p class="comanda__nota">Taxa de entrega à parte, informada pela loja no WhatsApp.</p>
+      </div>
+
+      <form class="pedido" data-form novalidate>
+        <fieldset class="pedido__grupo">
+          <legend>Como você quer receber?</legend>
+          <div class="opcoes">
+            <label class="opcao"><input type="radio" name="receber" value="entrega" checked><span>Entrega</span></label>
+            <label class="opcao"><input type="radio" name="receber" value="retirada"><span>Retirada no balcão</span></label>
+          </div>
+        </fieldset>
+
+        <div class="campo">
+          <label for="p-nome">Seu nome</label>
+          <input id="p-nome" name="nome" type="text" autocomplete="name" required aria-describedby="p-nome-erro">
+          <p class="campo__erro" id="p-nome-erro" hidden></p>
+        </div>
+
+        <div class="campo" data-so-entrega>
+          <label for="p-endereco">Endereço com número e bairro</label>
+          <input id="p-endereco" name="endereco" type="text" autocomplete="street-address" aria-describedby="p-endereco-erro">
+          <p class="campo__erro" id="p-endereco-erro" hidden></p>
+        </div>
+
+        <fieldset class="pedido__grupo" aria-describedby="p-pagamento-erro">
+          <legend>Pagamento</legend>
+          <div class="opcoes">
+            <label class="opcao"><input type="radio" name="pagamento" value="Pix"><span>Pix</span></label>
+            <label class="opcao"><input type="radio" name="pagamento" value="Cartão"><span>Cartão</span></label>
+            <label class="opcao"><input type="radio" name="pagamento" value="Dinheiro"><span>Dinheiro</span></label>
+          </div>
+          <p class="campo__erro" id="p-pagamento-erro" hidden></p>
+        </fieldset>
+
+        <div class="campo" data-so-dinheiro hidden>
+          <label for="p-troco">Troco para quanto? <span class="campo__opcional">(opcional)</span></label>
+          <input id="p-troco" name="troco" type="text" inputmode="decimal" placeholder="Ex.: 100">
+        </div>
+
+        <div class="campo">
+          <label for="p-obs">Observações <span class="campo__opcional">(opcional)</span></label>
+          <textarea id="p-obs" name="obs" rows="2" placeholder="Ex.: Clássico sem cebola, refrigerante do combo: guaraná"></textarea>
+        </div>
+
+        <button class="btn btn--primario btn--largo" type="submit">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-3.9A8 8 0 1 1 8 19.1z"/></svg>
+          Enviar pedido pelo WhatsApp
+        </button>
+      </form>
+
+      <div class="pedido__demo" data-demo hidden tabindex="-1">
+        <p class="pedido__demo-titulo">Pedido montado. O envio está desligado nesta demonstração.</p>
+        <p>Quando o número do WhatsApp da loja for configurado, o botão abre a conversa com esta mensagem:</p>
+        <pre data-demo-msg></pre>
+        <button type="button" class="btn btn--secundario btn--largo" data-copiar>Copiar texto do pedido</button>
+        <p class="pedido__copiado" data-copiado role="status"></p>
+      </div>
+
+      <div class="pedido__demo" data-enviado hidden tabindex="-1">
+        <p class="pedido__demo-titulo">Abrimos o WhatsApp da loja com o seu pedido.</p>
+        <p>Confira a mensagem e toque em enviar por lá. Se a conversa não abriu, <a href="#" data-link-whats target="_blank" rel="noopener">abra o WhatsApp por este link</a>.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <a class="barra-comanda" href="#comanda" data-barra hidden>
+    <span data-barra-qtd>0 itens</span>
+    <strong data-barra-total>R$ 0,00</strong>
+    <span class="barra-comanda__cta">Ver comanda</span>
   </a>
-</section>
 
-<footer>
-  <div class="brand-name display">BIELE BURGER</div>
-  <small>Site de apresentação · protótipo para avaliação do cliente</small>
-</footer>
-
-<script>
-  // alguns navegadores (principalmente dentro de páginas incorporadas) bloqueiam
-  // autoplay mesmo em vídeo mudo — se isso acontecer, tenta de novo no primeiro toque
-  const stryperVideo = document.getElementById("stryperVideo");
-  if (stryperVideo) {
-    const tryPlay = () => stryperVideo.play().catch(() => {});
-    tryPlay();
-    document.addEventListener("touchstart", tryPlay, { once: true, passive: true });
-    document.addEventListener("click", tryPlay, { once: true });
-  }
-</script>
-
+  <p class="sr" aria-live="polite" data-anuncio></p>
 </body>
 </html>
